@@ -1,6 +1,28 @@
+import AppKit
 import XCTest
 
 @testable import iPhoneUse
+
+final class ControlWindowLayoutTests: XCTestCase {
+    @MainActor
+    func testSidebarStaysLeftOfPhonePreviewAsWindowResizes() throws {
+        let phoneView = NSView()
+        let sidebar = ControlSidebar(frame: .zero)
+        let content = ControlWindowContent(phoneView: phoneView, sidebar: sidebar)
+        let divider = try XCTUnwrap(sidebar.subviews.compactMap { $0 as? NSBox }.first)
+
+        for width: CGFloat in [356, 506, 780] {
+            content.setFrameSize(NSSize(width: width, height: 700))
+            content.layoutSubtreeIfNeeded()
+
+            XCTAssertEqual(sidebar.frame.minX, content.bounds.minX)
+            XCTAssertEqual(sidebar.frame.width, ControlSidebar.width)
+            XCTAssertEqual(sidebar.frame.maxX, phoneView.frame.minX)
+            XCTAssertEqual(phoneView.frame.maxX, content.bounds.maxX)
+            XCTAssertEqual(divider.frame.midX, sidebar.bounds.maxX, accuracy: 1)
+        }
+    }
+}
 
 final class ControlWindowStateTests: XCTestCase {
     func testStartupWaitsWithoutADeviceAndOpensEachConnectedPhoneOnce() {
