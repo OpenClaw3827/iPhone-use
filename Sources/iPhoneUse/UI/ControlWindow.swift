@@ -378,7 +378,7 @@ final class ControlWindowController: NSWindowController, NSWindowDelegate {
 
 /// Keeps the phone geometry separate from the sidebar and places the connection
 /// overlay above both so disconnected input cannot reach either control surface.
-private final class ControlWindowContent: NSView {
+final class ControlWindowContent: NSView {
     private let phoneView: NSView
     private let connectionOverlay = ControlConnectionOverlay(frame: .zero)
     private let lockNotice = ControlLockNotice(frame: .zero)
@@ -388,8 +388,8 @@ private final class ControlWindowContent: NSView {
         super.init(frame: NSRect(x: 0, y: 0, width: 390 + ControlSidebar.width, height: 700))
         phoneView.translatesAutoresizingMaskIntoConstraints = false
         sidebar.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(phoneView)
         addSubview(sidebar)
+        addSubview(phoneView)
         lockNotice.translatesAutoresizingMaskIntoConstraints = false
         connectionOverlay.translatesAutoresizingMaskIntoConstraints = false
         // Last sibling receives hit testing first while the overlay is visible.
@@ -398,13 +398,13 @@ private final class ControlWindowContent: NSView {
         // through to the existing overlay or phone without changing either gate.
         addSubview(lockNotice)
         NSLayoutConstraint.activate([
-            phoneView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            phoneView.leadingAnchor.constraint(equalTo: sidebar.trailingAnchor),
             phoneView.topAnchor.constraint(equalTo: topAnchor),
             phoneView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            phoneView.trailingAnchor.constraint(equalTo: sidebar.leadingAnchor),
+            phoneView.trailingAnchor.constraint(equalTo: trailingAnchor),
             sidebar.widthAnchor.constraint(equalToConstant: ControlSidebar.width),
             sidebar.topAnchor.constraint(equalTo: topAnchor),
-            sidebar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            sidebar.leadingAnchor.constraint(equalTo: leadingAnchor),
             sidebar.bottomAnchor.constraint(equalTo: bottomAnchor),
             lockNotice.centerXAnchor.constraint(equalTo: phoneView.centerXAnchor),
             lockNotice.bottomAnchor.constraint(equalTo: phoneView.bottomAnchor, constant: -24),

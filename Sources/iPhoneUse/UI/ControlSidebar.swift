@@ -126,7 +126,7 @@ final class ControlSidebar: NSView {
             status.leadingAnchor.constraint(equalTo: stack.leadingAnchor),
             status.trailingAnchor.constraint(equalTo: stack.trailingAnchor),
             status.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            divider.leadingAnchor.constraint(equalTo: leadingAnchor),
+            divider.trailingAnchor.constraint(equalTo: trailingAnchor),
             divider.topAnchor.constraint(equalTo: topAnchor),
             divider.bottomAnchor.constraint(equalTo: bottomAnchor),
             divider.widthAnchor.constraint(equalToConstant: 1),
